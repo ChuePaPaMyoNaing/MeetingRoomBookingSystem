@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-MeetingroombookingAppApplication<meetingroombooking-app>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "mainClass": "jp.co.cybermissions.itspj.java.meetingroombookingapp.MeetingroombookingAppApplication",
+      "projectName": "meetingroombooking-app",
+      "args": ""
+    }
+  ]
+}

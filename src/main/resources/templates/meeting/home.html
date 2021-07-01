@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+   <head>
+   <meta charset="UTF-8">
+   <title>Meeting Room Booking System</title>
+   <link rel="stylesheet" 
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+   <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
+      integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V"
+      crossorigin="anonymous"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+   </head>
+      <form>
+         <body>
+            <table class="table">
+               <tr>
+                  <th>Employee Name</th>
+                  <th>Meeting RoomNo</th>
+                  <th>Date</th>
+                  <th>StartTime</th>
+                  <th>EndTime</th>
+                  <th>Action</th>
+               </tr>
+               <tbody>
+                  <tr th:each="m : ${meeting}">
+                     <td>[[${m.employeeName}]]</td>
+                     <td>[[${m.roomNo}]]</td>
+                     <td><p th:text="${#dates.format(m.date, 'yyyy-MM-dd')}"></p></td>
+                     <td>[[${m.startTime}]]</td>
+                     <td>[[${m.endTime}]]</td>
+                     <td><a th:href="@{/meeting/{id}(id=${m.id})}"><i class="fas fa-eye"></i>Show</a>
+                        <a th:href="@{/meeting/{id}/update/(id=${m.id})}"><i class="fas fa-user-edit"></i>Update</a>
+                        <a th:href="@{/meeting/{id}/cancel/(id=${m.id})}"><i class="fas fa-trash-alt"></i>Cancel</a></td>
+                  </tr>
+               </tbody>
+            </table>
+            <td><a th:href="@{/meeting/booking}">Add New Booking</a></td>
+         </body>
+   </form>
+</html>
