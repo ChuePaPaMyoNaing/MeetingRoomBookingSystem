@@ -39,7 +39,9 @@ public class MeetingController{
   @GetMapping("")
   public String index(Model model, Principal principal) {
     model.addAttribute("meeting", rep.findByDateOrderByDesc());
-    model.addAttribute("employee", principal.getName());
+    if (principal != null) {
+      model.addAttribute("employee", principal.getName());
+    }
     return "meeting/home";
   }
 
