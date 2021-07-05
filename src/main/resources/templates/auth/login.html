@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ログイン</title>
+</head>
+
+<body>
+  <h2>ログイン</h2>  
+  <form th:action="@{/login}" th:method="post" novalidate>
+    <div>
+      <label for="name">名前：</label>
+      <input type="text" name="name">
+    </div>
+    <div>
+      <label for="password">パスワード：</label>
+      <input type="password" name="password">
+    </div>
+    <button>ログイン</button>
+  </form>
+</body>
+</html>

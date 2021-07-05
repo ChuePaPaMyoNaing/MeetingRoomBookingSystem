@@ -1,10 +1,9 @@
 package jp.co.cybermissions.itspj.java.meetingroombookingapp.controllers;
 
+import java.security.Principal;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,17 +31,15 @@ public class MeetingController{
   private final MeetingRepository rep;
   private final MeetingTimeValidator validator;
 
-  @InitBinder
+  @InitBinder("booking")
   public void initBinder(WebDataBinder binder) {
       binder.addValidators(validator);
   }
 
-  @Autowired
-  MessageSource msg;
-
   @GetMapping("")
-  public String index(Model model) {
-    model.addAttribute("meeting", rep.findAll());
+  public String index(Model model, Principal principal) {
+    model.addAttribute("meeting", rep.findByDateOrderByDesc());
+    model.addAttribute("employee", principal.getName());
     return "meeting/home";
   }
 
@@ -59,43 +56,38 @@ public class MeetingController{
         model.addAttribute("meeting", meeting);
         return "meeting/booking";
       }
-
       List<Meeting> meetingDB = new ArrayList<Meeting>();
      
       meetingDB = rep.findAll();
       if(meetingDB.size() > 0 ) {
         for(Meeting meetingdb : meetingDB){
-            System.out.println(meetingdb.getDate());
-            System.out.println(meeting.getDate());
 
           if(meetingdb.getDate().compareTo(meeting.getDate()) == 0){
+
+            if(meetingdb.getRoomNo() == meeting.getRoomNo()){
               
-            LocalTime dbStartTime= meetingdb.getStartTime();
-            LocalTime dbEndTime = meetingdb.getEndTime();
-  
-            LocalTime sTime = meeting.getStartTime();
-            LocalTime eTime = meeting.getEndTime();
-  
-            int i = dbStartTime.compareTo(sTime);
-            int j = dbStartTime.compareTo(eTime);
-            int k = dbEndTime.compareTo(eTime);
-  
-            if(meetingdb.getRoomNo() == meeting.getRoomNo() || dbStartTime.equals(sTime) || i < 0 || j < 0 || j > 0 || (i > 0 && k < 0)){
-              attrs.addFlashAttribute("success", "Meeting cannot take"); 
-              return "meeting/booking";
+              LocalTime dbStartTime= meetingdb.getStartTime();
+              LocalTime dbEndTime = meetingdb.getEndTime();
+    
+              LocalTime sTime = meeting.getStartTime();
+              LocalTime eTime = meeting.getEndTime();
+    
+              int i = dbStartTime.compareTo(sTime);
+              int j = dbStartTime.compareTo(eTime);
+              int k = dbEndTime.compareTo(eTime);
+              int l = dbEndTime.compareTo(sTime);
+    
+              if(dbStartTime.equals(sTime) || (i < 0 && k > 0)|| (j < 0  && i > 0)|| (j < 0 && l > 0) || (i > 0 && k < 0)){
+                model.addAttribute("errormessage", "Sorry!!!Meeting booking cannot be taken."); 
+                return "meeting/booking";
+              }
             }
           }
         }
       }
-      
-
-      System.out.println("Size  is  "+meetingDB.size());
-
-     
       rep.save(meeting);
       return "redirect:/meeting";
   }
-
 
   @GetMapping("/{id}")
   public String detail(@PathVariable int id, Model model) {
@@ -115,7 +107,34 @@ public class MeetingController{
   public String update(@PathVariable int id, @ModelAttribute Meeting meeting,
     Model model, RedirectAttributes attrs){
     meeting.setId(id);
-    rep.save(meeting);
+    List<Meeting> meetingDB = new ArrayList<Meeting>();
+      meetingDB = rep.findAll();
+      if(meetingDB.size() > 0 ) {
+        for(Meeting meetingdb : meetingDB){
+            if(meetingdb.getId() == (id)) {
+              continue;
+            }
+            if(meetingdb.getDate().compareTo(meeting.getDate()) == 0){
+              if(meetingdb.getRoomNo() == meeting.getRoomNo()){
+                LocalTime dbStartTime= meetingdb.getStartTime();
+                LocalTime dbEndTime = meetingdb.getEndTime();
+                LocalTime sTime = meeting.getStartTime();
+                LocalTime eTime = meeting.getEndTime();
+      
+                int i = dbStartTime.compareTo(sTime);
+                int j = dbStartTime.compareTo(eTime);
+                int k = dbEndTime.compareTo(eTime);
+                int l = dbEndTime.compareTo(sTime);
+                
+                if(dbStartTime.equals(sTime) || (i < 0 && k > 0)|| (j < 0  && i > 0)|| (j < 0 && l > 0) || (i > 0 && k < 0)){
+                  model.addAttribute("errormessage", "Sorry!!!Meeting booking cannot be taken."); 
+                  return "meeting/booking";
+                }
+              }
+            }
+          }
+      }
+      rep.save(meeting);
     return "redirect:/meeting";
   }
 

@@ -1,8 +1,8 @@
 package jp.co.cybermissions.itspj.java.meetingroombookingapp.models;
 
 
+import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,7 +43,7 @@ public class Meeting {
   @NotNull(message = "Date cannot not be null")
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   @Column(name="date", nullable = true)
-  private Date date;
+  private LocalDate date;
 
   @NotNull
   @Column(name="startTime")
@@ -69,5 +69,5 @@ public class Meeting {
   @ManyToOne
   @JoinColumn(name="room_id")
   private Room room;
-
+  
 }
