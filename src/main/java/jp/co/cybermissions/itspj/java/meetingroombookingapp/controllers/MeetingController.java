@@ -31,9 +31,9 @@ public class MeetingController{
   private final MeetingRepository rep;
   private final MeetingTimeValidator validator;
 
-  @InitBinder("booking")
+  @InitBinder("meeting")
   public void initBinder(WebDataBinder binder) {
-      binder.addValidators(validator);
+    binder.addValidators(validator);
   }
 
   @GetMapping("")
@@ -106,9 +106,15 @@ public class MeetingController{
   }
 
   @PatchMapping("/{id}")
-  public String update(@PathVariable int id, @ModelAttribute Meeting meeting,
-    Model model, RedirectAttributes attrs){
-    meeting.setId(id);
+  public String update(@Validated @ModelAttribute Meeting meeting,
+      @PathVariable int id, Model model, 
+      BindingResult result, RedirectAttributes attrs){
+      meeting.setId(id);
+      
+      if (result.hasErrors()) {
+        model.addAttribute("meeting", meeting);
+        return "meeting/booking";
+      }
     List<Meeting> meetingDB = new ArrayList<Meeting>();
       meetingDB = rep.findAll();
       if(meetingDB.size() > 0 ) {
