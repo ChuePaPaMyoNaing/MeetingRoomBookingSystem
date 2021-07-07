@@ -34,6 +34,9 @@
                         <option th:value="'3'" th:text="3"></option>
                         <option th:value="'4'" th:text="4"></option>
                         <option th:value="'5'" th:text="5"></option>
+                        <option th:value="'6'" th:text="6"></option>
+                        <option th:value="'7'" th:text="7"></option>
+                        <option th:value="'8'" th:text="8"></option>
                       </select>
                     </div>
                     <div class="col-md-6 mb-4">
@@ -96,7 +99,7 @@
                     <div class="col-md-6 mb-4">
                       <label class="form-label" for="startTime">Start Time: </label> 
                       <input class="form-control" type="time" th:field="*{startTime}" />
-                      <p th:if="${#fields.hasErrors('endTime')}" th:errorclass="error" th:errors="*{endTime}">
+                      <p th:if="${#fields.hasErrors('startTime')}" th:errorclass="error" th:errors="*{startTime}">
                     </div>
                     <div class="col-md-6 mb-4">
                       <label class="form-label" for="endTime" >End Time: </label> 

@@ -19,6 +19,9 @@ public class MeetingTimeValidator implements Validator {
     if(meeting != null) {
       LocalTime startTime = meeting.getStartTime();
       LocalTime endTime = meeting.getEndTime();
+      if(startTime == null || endTime == null) {
+        return;
+      }
       int i = startTime.compareTo(endTime);
       if(i > 0) {
         errors.rejectValue("startTime", "MeetingTimeValidator.startTime", "StartTime is not valid");

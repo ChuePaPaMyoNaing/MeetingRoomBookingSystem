@@ -76,6 +76,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   public void configure(WebSecurity web) throws Exception {
     // staticファイルはセキュリティ設定対象外としておく
-    web.ignoring().antMatchers("/js/**", "/css/**", "/webjars/**");
+    web.ignoring().antMatchers("/js/**", "/css/**", "/webjars/**", "/image/**");
   }
 }
